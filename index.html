@@ -2,10 +2,273 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>My Personal Homepage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" /> 
+  <title>Tao WANG — Personal Site</title>
+  <meta name="description" content="Tao Wang's personal website: Projects, Blog, About, Contact." />
+
+  <style>
+      /* ===== 设计系统（CSS 变量） ===== */
+    :root{
+      --bg:#f5fbfd;            /* 页面浅蓝底 */
+      --ink:#111;              /* 主文字色 */
+      --ink-muted:#444;        /* 次级文字 */
+      --brand:#0a57ff;         /* 侧栏标题蓝 */
+      --accent:#e00000;        /* 主内容区标题红 */
+      --line:#b7d7df;          /* 点缀虚线色 */
+      --panel:#e6f6fa;         /* 主内容面板底色 */
+      --sidebar-bg:#072b83;    /* 侧栏深蓝背景 */
+      --sidebar-ink:#e6f1ff;   /* 侧栏文字颜色 */
+      --link:#0645ad;          /* 链接正常态 */
+      --link-visited:#0b0080;  /* 链接访问态 */
+    }
+
+    /* 让根元素与 body 占满高度，便于 sticky 等布局 */
+    html,body{height:100%;}
+    body{
+      margin:0; /* 去除默认外边距 */
+      font:16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; /* 基础字体与行高 */
+      color:var(--ink); /* 主文字色 */
+      background:var(--bg); /* 页面背景色 */
+    }
+    
+    /* ===== 页面两栏栅格布局 ===== */
+    .wrap{
+      display:grid; /* 使用 CSS Grid */
+      grid-template-columns: 260px 1fr; /* 左侧固定 260px 侧栏，右侧自适应主栏 */
+      gap:18px; /* 栅格间距 */
+      max-width:1400px; /* 页面最大宽度 */
+      margin:0 auto; /* 居中 */
+    }
+
+    /* ===== 顶部条（移动端才显示） ===== */
+    .topbar{
+      display:none; /* 默认隐藏，媒体查询中显示 */
+      align-items:center; /* 纵向居中 */
+      justify-content:space-between; /* 两端对齐 */
+      padding:10px 14px; /* 内边距 */
+      background:var(--sidebar-bg); /* 背景与侧栏一致 */
+      color:#fff; /* 文字白色 */
+      position:sticky; top:0; z-index:5 /* 吸顶，覆盖在上层 */
+    }
+    .menu-btn-{border:0; background:transparent; color:#fff; font-size:20px} /* 菜单按钮样式 */
+
+    /* ===== 侧栏 ===== */
+    aside{
+      background:var(--sidebar-bg); /* 深蓝背景 */
+      color:var(--sidebar-ink);     /* 浅色文字 */
+      min-height:100vh;             /* 至少等于视窗高度 */
+      position:sticky; top:0;       /* 随滚动固定在视窗顶端 */
+    }
+    .brand{
+      padding:16px 16px 10px; /* 内边距 */
+      border-bottom:3px solid #3c6bff /* 底部描边 */
+    }
+    .brandh1{
+      margin:0; font-size:28px; color:#7ff1ff; letter-spacing:.2px /* 标题风格 */
+    }
+    .brand small{
+      display:block; color:#bcd7ff; margin-top:2px /* 副标题风格 */
+    }
+
+    .nav-section{border:1px solid #1d46b4; margin:12px;} /* 导航区块外框与外边距 */
+    .nav-section h3{
+      margin:0; padding:8px 10px; background:#0f3cb3; font-size:14px;
+      text-transform:uppercase; letter-spacing:.5px /* 小节标题条 */
+    }
+    .nav{list-style:none; margin:0; padding:0;} /* 去除列表样式与间距 */
+    .nav a{
+      display:block; padding:8px 10px; color:#d8e6ff; text-decoration:none; border-top:1px solid #1d46b4
+      /* 链接做成整行可点，分隔线增强“目录感” */
+    }
+    .nav a:hover{background:#1247cc} /* 悬停高亮 */
+
+    /* ===== 主内容区 ===== */
+    main{padding:18px;} /* 主体四周留白 */
+    .panel{
+      background:var(--panel); border:1px dashed var(--line); padding:16px; margin-bottom:16px;
+      /* 内容块：浅面板+虚线边框，呼应“老派网页”视觉 */
+    }
+    .panel h2{color:var(--accent); margin:0 0 6px;} /* 每块的大标题红色、紧凑间距 */
+    .lede{font-weight:600; margin:2px 0 10px} /* 引导句（导语） */
+
+    .news{margin-top:6px} /* 博客列表外边距 */
+    .news-item{
+      background:white; border:1px dashed var(--line); padding:12px 14px; margin:10px 0
+      /* 单条“新闻/博文”卡片 */
+    }
+    .news-item h3{margin:0 0 4px; color:#cf0a0a} /* 每篇的条目标题 */
+
+    /* ===== 项目网格 ===== */
+    .grid{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:12px}
+    /* 两列自适应网格。minmax(0,1fr) 避免内容撑破布局 */
+
+    .card{background:#fff; border:1px dashed var(--line); padding:14px} /* 项目卡片 */
+    .card h4{margin:0 0 6px} /* 卡片标题间距 */
+    .meta{font-size:13px; color:var(--ink-muted)} /* 次要信息（时间/技术栈/链接） */
+
+    /* ===== 页脚 ===== */
+    footer{padding:30px 18px; color:#666} /* 页脚留白与颜色 */
+
+    a{color:var(--link);} a:visited{color:var(--link-visited)} /* 链接正常/访问态颜色 */
+
+    /* ===== 响应式：<=900px 认为是移动端 ===== */
+    @media (max-width: 900px){
+      .wrap{grid-template-columns:1fr} /* 从两列切换为单列 */
+      aside{position:static; display:none; min-height:auto} /* 侧栏默认收起，放到流里 */
+      .topbar{display:flex} /* 顶部条在移动端显示 */
+      .grid{grid-template-columns:1fr} /* 项目从两列改为单列 */
+    }
+  </style>
 </head>
+  
 <body>
-  <h1>Hello, I'm Tao WANG</h1>
-  <p>Welcome to my personal homepage.</p>
+   <!-- 顶部条：仅在移动端出现，用来打开侧栏 -->
+  <div class="topbar">
+    <button class="menu-btn" aria-label="打开菜单" onclick="document.querySelector('aside').style.display='block'">☰</button> <!-- 点击显示侧栏 -->
+    <strong>Tao WANG</strong> <!-- 顶部中间标题 -->
+    <span></span> <!-- 占位，使左右对齐更均衡 -->
+  </div>
+  
+  <div class="wrap"> <!-- 整页栅格容器：左侧 aside + 右侧 main -->
+    <!-- 侧栏导航（致敬老派风格） -->
+    <aside>
+      <div class="brand">
+        <h1>Tao WANG</h1> <!-- 站点主标题 -->
+        <small>Personal space · 个人空间</small> <!-- 副标题 -->
+      </div>
+
+      <div class="nav-section">
+        <h3>Site</h3> <!-- 导航分组标题 -->
+        <nav>
+          <ul class="nav">
+            <li><a href="#home">Home</a></li> <!-- 跳转到主页区块 -->
+            <li><a href="#projects">Projects</a></li> <!-- 跳转到项目区块 -->
+            <li><a href="#blog">Blog</a></li> <!-- 跳转到博客区块 -->
+            <li><a href="#about">About Me / Contact</a></li> <!-- 跳转到关于/联系 -->
+          </ul>
+        </nav>
+      </div>
+
+      <div class="nav-section">
+        <h3>Social</h3> <!-- 社交链接分组 -->
+        <ul class="nav">
+          <li><a href="https://github.com/" target="_blank" rel="noopener">GitHub</a></li> <!-- 新窗口打开，noopener 提升安全 -->
+          <li><a href="https://scholar.google.com/" target="_blank" rel="noopener">Google Scholar</a></li>
+          <li><a href="https://twitter.com/" target="_blank" rel="noopener">Twitter</a></li>
+          <li><a href="mailto:tao@example.com">Email</a></li> <!-- 邮件链接 -->
+        </ul>
+      </div>
+
+      <div class="nav-section">
+        <h3>Web Site</h3> <!-- 站务相关 -->
+        <ul class="nav">
+          <li><a href="#whatsnew">What's New?</a></li> <!-- 占位锚点（当前页面里尚未有对应 section） -->
+          <li><a href="#rss">RSS</a></li> <!-- 同上，预留菜单项 -->
+        </ul>
+      </div>
+
+      <div class="nav-section">
+        <h3>Links</h3> <!-- 友链分组 -->
+        <ul class="nav">
+          <li><a href="#">Friend Link 1</a></li> <!-- 占位链接 -->
+          <li><a href="#">Friend Link 2</a></li>
+        </ul>
+      </div>
+    </aside>
+
+        <!-- 主内容 -->
+    <main>
+      <!-- 顶部焦点块 -->
+      <section id="home" class="panel"> <!-- 与侧栏 Home 链接对应的锚点 -->
+        <h2>Hello, I'm Tao WANG</h2> <!-- 主区块标题（红色样式） -->
+        <p class="lede">Welcome to my personal homepage. 这里是我的个人空间，主要记录项目和随笔。</p> <!-- 导语 -->
+        <p>本页风格借鉴了早期的网页布局：左侧为导航目录，右侧为内容流，标题使用醒目的红色。样式尽量保持“朴素、耐看、可维护”。</p>
+      </section>
+
+      <!-- Projects -->
+      <section id="projects" class="panel"> <!-- 项目区块 -->
+        <h2>Projects</h2>
+        <div class="grid"> <!-- 两列项目网格 -->
+          <article class="card">
+            <h4>Project Alpha <span class="meta">(2025 · Python)</span></h4> <!-- 项目名 + 元信息 -->
+            <p>一个用于数据清洗与可视化的小工具。提供 CLI 与简单网页界面。</p> <!-- 简介 -->
+            <p class="meta"><a href="#">GitHub</a> · <a href="#">文档</a></p> <!-- 链接（占位） -->
+          </article>
+          <article class="card">
+            <h4>Project Beta <span class="meta">(2024 · Research)</span></h4>
+            <p>关于文本检索的实验与报告，复现实验并给出复现实例。</p>
+            <p class="meta"><a href="#">Paper</a> · <a href="#">Code</a></p>
+          </article>
+          <article class="card">
+            <h4>Project Gamma <span class="meta">(2023 · Web)</span></h4>
+            <p>极简静态博客引擎，Markdown 输入，纯静态输出。</p>
+            <p class="meta"><a href="#">Demo</a> · <a href="#">GitHub</a></p>
+          </article>
+          <article class="card">
+            <h4>Project Delta <span class="meta">(2022 · Misc)</span></h4>
+            <p>一些杂项脚本集合：重命名、批量下载、格式转换。</p>
+            <p class="meta"><a href="#">GitHub</a></p>
+          </article>
+        </div>
+      </section>
+
+      <!-- Blog 列表（也可当“动态/新闻”） -->
+      <section id="blog" class="panel"> <!-- 与侧栏 Blog 链接对应 -->
+        <h2>Blog</h2>
+        <div class="news">
+          <article class="news-item">
+            <h3>读书札记：构建可维护的个人网站</h3> <!-- 单条文章标题 -->
+            <p>谈谈为什么选择静态站点、如何组织内容和链接、以及长期维护的取舍。</p> <!-- 摘要 -->
+            <p class="meta">2025-09-23 · <a href="#">阅读全文</a></p> <!-- 日期 + 链接 -->
+          </article>
+          <article class="news-item">
+            <h3>工具清单更新：我常用的写作与研究工具</h3>
+            <p>列出我在 Mac/Linux 上日常使用的工具与设置，附配置文件。</p>
+            <p class="meta">2025-09-17 · <a href="#">阅读全文</a></p>
+          </article>
+          <article class="news-item">
+            <h3>一次项目复盘：从原型到上线</h3>
+            <p>记录一个个人项目从需求、设计、编码到部署的全过程。</p>
+            <p class="meta">2025-09-10 · <a href="#">阅读全文</a></p>
+          </article>
+        </div>
+      </section>
+      
+      <!-- About / Contact -->
+      <section id="about" class="panel"> <!-- 与侧栏 About 链接对应 -->
+        <h2>About Me / Contact</h2>
+        <p>我叫 <strong>Tao WANG</strong>。研究/工作方向：数据、NLP 与信息检索。喜欢做一些小而美的工具，也记录读书和随想。</p>
+        <ul>
+          <li>Email：<a href="mailto:tao@example.com">tao@example.com</a></li> <!-- 可点击发邮件 -->
+          <li>GitHub：<a href="https://github.com/" target="_blank" rel="noopener">github.com/yourname</a></li>
+          <li>LinkedIn：<a href="#" target="_blank" rel="noopener">/in/yourname</a></li>
+        </ul>
+      </section>
+      
+      <footer>
+        © <span id="y"></span> Tao WANG · Built with plain HTML/CSS. Last updated manually.
+        <!-- © 年份由脚本动态填充；其他是固定文案 -->
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // ===== 交互脚本：移动端点击空白处关闭侧栏 =====
+    document.addEventListener('click', (e)=>{
+      const aside = document.querySelector('aside'); // 取侧栏节点
+      if(window.innerWidth <= 900){ // 仅在移动端生效
+        // 点击侧栏外部则收起
+        if(aside.style.display==='block' && !aside.contains(e.target) && !e.target.classList.contains('menu-btn')){
+          aside.style.display = 'none';
+        }
+        // 点击侧栏里的任意链接后，延迟收起，给锚点跳转一点时间
+        if(e.target.tagName==='A' && aside.contains(e.target)){
+          setTimeout(()=>aside.style.display='none', 100);
+        }
+      }
+    });
+    // ===== 页脚年份自动更新 =====
+    document.getElementById('y').textContent = new Date().getFullYear(); // 设置为当前年份
+  </script>
 </body>
 </html>
