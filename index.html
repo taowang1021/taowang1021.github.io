@@ -109,7 +109,10 @@
     /* ===== 页脚 ===== */
     footer{padding:30px 18px; color:#666} /* 页脚留白与颜色 */
 
-    a{color:var(--link);} a:visited{color:var(--link-visited)} /* 链接正常/访问态颜色 */
+    /* 链接点击后不变色（全站） */
+    a, a:visited { color: var(--link); }
+    /* 侧栏链接点击后也不变色 */
+    .nav a, .nav a:visited { color: #d8e6ff; }
 
     /* ===== 响应式：<=900px 认为是移动端 ===== */
     @media (max-width: 900px){
@@ -147,24 +150,6 @@
             <li><a href="#about">About Me / Contact</a></li> <!-- 跳转到关于/联系 -->
           </ul>
         </nav>
-      </div>
-
-      <div class="nav-section">
-        <h3>Social</h3> <!-- 社交链接分组 -->
-        <ul class="nav">
-          <li><a href="https://github.com/" target="_blank" rel="noopener">GitHub</a></li> <!-- 新窗口打开，noopener 提升安全 -->
-          <li><a href="https://scholar.google.com/" target="_blank" rel="noopener">Google Scholar</a></li>
-          <li><a href="https://twitter.com/" target="_blank" rel="noopener">Twitter</a></li>
-          <li><a href="mailto:tao@example.com">Email</a></li> <!-- 邮件链接 -->
-        </ul>
-      </div>
-
-      <div class="nav-section">
-        <h3>Web Site</h3> <!-- 站务相关 -->
-        <ul class="nav">
-          <li><a href="#whatsnew">What's New?</a></li> <!-- 占位锚点（当前页面里尚未有对应 section） -->
-          <li><a href="#rss">RSS</a></li> <!-- 同上，预留菜单项 -->
-        </ul>
       </div>
 
       <div class="nav-section">
