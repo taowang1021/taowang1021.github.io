@@ -3,12 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1" /> 
-  <title>Tao WANG — Personal Site</title>
+  <title>Tao — Personal Site</title>
   <meta name="description" content="Tao Wang's personal website: Projects, Blog, About, Contact." />
 
   <style>
       /* ===== 设计系统（CSS 变量） ===== */
     :root{
+      /* 定义全局变量，在这个地方是一些表示颜色的变量 */
       --bg:#f5fbfd;            /* 页面浅蓝底 */
       --ink:#111;              /* 主文字色 */
       --ink-muted:#444;        /* 次级文字 */
@@ -19,20 +20,23 @@
       --sidebar-bg:#072b83;    /* 侧栏深蓝背景 */
       --sidebar-ink:#e6f1ff;   /* 侧栏文字颜色 */
       --link:#0645ad;          /* 链接正常态 */
-      --link-visited:#0b0080;  /* 链接访问态 */
+      --link-visited:#0b0080;  /* 链接访问态，但在后续的代码中未使用 */
     }
 
     /* 让根元素与 body 占满高度，便于 sticky 等布局 */
     html,body{height:100%;}
     body{
+      /* body表示页面主体，里面的一些变量是CSS自带的标识符 */
+      /* body前面没有“.”，因为这里是元素选择器，直接选择body标签下的所有内容来设置格式 */
       margin:0; /* 去除默认外边距 */
       font:16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; /* 基础字体与行高 */
-      color:var(--ink); /* 主文字色 */
+      color:var(--ink); /* 主文字色， var()表示调用前面声明的全局变量指代的内容 */
       background:var(--bg); /* 页面背景色 */
     }
     
     /* ===== 页面两栏栅格布局 ===== */
     .wrap{
+      /* 这里的"."表示类选择器，"wrap”是用户用div自定义的类，而这里是设置后面自定义类内容的格式 */
       display:grid; /* 使用 CSS Grid */
       grid-template-columns: 260px 1fr; /* 左侧固定 260px 侧栏，右侧自适应主栏 */
       gap:18px; /* 栅格间距 */
@@ -50,7 +54,13 @@
       color:#fff; /* 文字白色 */
       position:sticky; top:0; z-index:5 /* 吸顶，覆盖在上层 */
     }
-    .menu-btn-{border:0; background:transparent; color:#fff; font-size:20px} /* 菜单按钮样式 */
+    .menu-btn-{
+      /* 移动端顶部条右侧的下拉菜单按钮样式 */
+      border:0; 
+      background:transparent; 
+      color:#fff; 
+      font-size:20px
+    } 
 
     /* ===== 侧栏 ===== */
     aside{
@@ -60,66 +70,156 @@
       position:sticky; top:0;       /* 随滚动固定在视窗顶端 */
     }
     .brand{
+      /* brand也是自定义标签，自定义了一个区域，把一些html自带的标签圈进去 */
       padding:16px 16px 10px; /* 内边距 */
       border-bottom:3px solid #3c6bff /* 底部描边 */
     }
     .brandh1{
-      margin:0; font-size:28px; color:#7ff1ff; letter-spacing:.2px /* 标题风格 */
+      /*是自定义标签brand下的h1标签，而不是所有h1标签中的内容，h1是html自带的标签，意为几级标题 */
+      margin:0;
+      font-size:28px; 
+      color:#7ff1ff; 
+      letter-spacing:.2px /* 标题风格 */
     }
     .brand small{
-      display:block; color:#bcd7ff; margin-top:2px /* 副标题风格 */
+      /* small为辅助文字标签，也是html自带的 */
+      display:block; 
+      color:#bcd7ff; 
+      margin-top:2px /* 副标题风格 */
     }
 
-    .nav-section{border:1px solid #1d46b4; margin:12px;} /* 导航区块外框与外边距 */
+    .nav-section{
+      /* 导航区块外框与外边距 */
+      /* 导航区块也是自行定义的，因为用的是“.”引用 */
+      border:1px solid #1d46b4; 
+      margin:12px;
+    } 
     .nav-section h3{
-      margin:0; padding:8px 10px; background:#0f3cb3; font-size:14px;
-      text-transform:uppercase; letter-spacing:.5px /* 小节标题条 */
+      /* 小节标题条, h3是html自带标识符，表示小标题 */
+      margin:0; 
+      padding:8px 10px; 
+      background:#0f3cb3; 
+      font-size:14px;
+      text-transform:uppercase; 
+      letter-spacing:.5px 
     }
-    .nav{list-style:none; margin:0; padding:0;} /* 去除列表样式与间距 */
+    .nav{
+      /* 去除列表样式与间距 */
+      list-style:none; 
+      margin:0; 
+      padding:0;
+        } 
     .nav a{
-      display:block; padding:8px 10px; color:#d8e6ff; text-decoration:none; border-top:1px solid #1d46b4
+      /* a表示anchor，是html自带的标识符，表示每一个具体链接 */
+      display:block; 
+      padding:8px 10px; 
+      color:#d8e6ff; 
+      text-decoration:none; 
+      border-top:1px solid #1d46b4
       /* 链接做成整行可点，分隔线增强“目录感” */
     }
-    .nav a:hover{background:#1247cc} /* 悬停高亮 */
+    .nav a:hover{
+      /* :hover表示a的一种状态，在此是悬停高亮，还有点击时等不同的标识符 */
+      background:#1247cc
+    } 
 
     /* ===== 主内容区 ===== */
-    main{padding:18px;} /* 主体四周留白 */
+    main{
+      /* 主体四周留白 */
+      padding:18px;
+    } 
     .panel{
-      background:var(--panel); border:1px dashed var(--line); padding:16px; margin-bottom:16px;
+      background:var(--panel); 
+      border:1px dashed var(--line); 
+      padding:16px; 
+      margin-bottom:16px;
       /* 内容块：浅面板+虚线边框，呼应“老派网页”视觉 */
     }
-    .panel h2{color:var(--accent); margin:0 0 6px;} /* 每块的大标题红色、紧凑间距 */
-    .lede{font-weight:600; margin:2px 0 10px} /* 引导句（导语） */
+    .panel h2{
+      /* 每块的大标题红色、紧凑间距 */
+      color:var(--accent); 
+      margin:0 0 6px;
+    } 
+    .lede{
+      /* 引导句（导语） */
+      font-weight:600; 
+      margin:2px 0 10px
+    } 
 
-    .news{margin-top:6px} /* 博客列表外边距 */
+    .news{
+      /* 博客列表外边距 */
+      margin-top:6px
+    } 
     .news-item{
-      background:white; border:1px dashed var(--line); padding:12px 14px; margin:10px 0
+      background:white; 
+      border:1px dashed var(--line); 
+      padding:12px 14px; 
+      margin:10px 0
       /* 单条“新闻/博文”卡片 */
     }
-    .news-item h3{margin:0 0 4px; color:#cf0a0a} /* 每篇的条目标题 */
+    .news-item h3{
+      /* 每篇的条目标题 */
+      margin:0 0 4px; 
+      color:#cf0a0a
+    } 
 
     /* ===== 项目网格 ===== */
-    .grid{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:12px}
-    /* 两列自适应网格。minmax(0,1fr) 避免内容撑破布局 */
+    .grid{
+      /* 两列自适应网格。minmax(0,1fr) 避免内容撑破布局 */
+      display:grid; 
+      grid-template-columns:repeat(2, minmax(0,1fr)); 
+      gap:12px
+    }
 
-    .card{background:#fff; border:1px dashed var(--line); padding:14px} /* 项目卡片 */
-    .card h4{margin:0 0 6px} /* 卡片标题间距 */
-    .meta{font-size:13px; color:var(--ink-muted)} /* 次要信息（时间/技术栈/链接） */
+    .card{
+      /* 项目卡片 */
+      background:#fff; 
+      border:1px dashed var(--line); 
+      padding:14px
+    } 
+    .card h4
+    {
+      /* 卡片标题间距 */
+      margin:0 0 6px
+    } 
+    .meta{
+      /* 次要信息（时间/技术栈/链接） */
+      font-size:13px; 
+      color:var(--ink-muted)
+    } 
 
     /* ===== 页脚 ===== */
-    footer{padding:30px 18px; color:#666} /* 页脚留白与颜色 */
+    footer{
+      /* 页脚留白与颜色 */
+      padding:30px 18px; 
+      color:#666
+    } 
 
-    /* 链接点击后不变色（全站） */
+    /* 链接点击后不变色（全站），a就是html中表示链接的标签 */
     a, a:visited { color: var(--link); }
     /* 侧栏链接点击后也不变色 */
     .nav a, .nav a:visited { color: #d8e6ff; }
 
     /* ===== 响应式：<=900px 认为是移动端 ===== */
     @media (max-width: 900px){
-      .wrap{grid-template-columns:1fr} /* 从两列切换为单列 */
-      aside{position:static; display:none; min-height:auto} /* 侧栏默认收起，放到流里 */
-      .topbar{display:flex} /* 顶部条在移动端显示 */
-      .grid{grid-template-columns:1fr} /* 项目从两列改为单列 */
+      .wrap{
+        /* 从两列切换为单列 */
+        grid-template-columns:1fr
+      } 
+      aside{
+        /* 侧栏默认收起，放到流里 */
+        position:static; 
+        display:none; 
+        min-height:auto
+      } 
+      .topbar{
+        /* 顶部条在移动端显示 */
+        display:flex
+      } 
+      .grid{
+        /* 项目从两列改为单列 */
+        grid-template-columns:1fr
+      } 
     }
   </style>
 </head>
@@ -128,7 +228,7 @@
    <!-- 顶部条：仅在移动端出现，用来打开侧栏 -->
   <div class="topbar">
     <button class="menu-btn" aria-label="打开菜单" onclick="document.querySelector('aside').style.display='block'">☰</button> <!-- 点击显示侧栏 -->
-    <strong>Tao WANG</strong> <!-- 顶部中间标题 -->
+    <strong>Tao</strong> <!-- 顶部中间标题 -->
     <span></span> <!-- 占位，使左右对齐更均衡 -->
   </div>
   
